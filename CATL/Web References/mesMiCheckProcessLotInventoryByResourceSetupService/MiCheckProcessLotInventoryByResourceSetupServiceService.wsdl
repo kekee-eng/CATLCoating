@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:b0="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import namespace="http://machineintegration.ws.atlmes.com/" location="http://172.26.11.3:50000/atlmeswebservice/MiCheckProcessLotInventoryByResourceSetupServiceService?wsdl=binding&amp;mode=ws_policy" />
+  <types />
+  <service name="MiCheckProcessLotInventoryByResourceSetupServiceService">
+    <port name="MiCheckProcessLotInventoryByResourceSetupServicePort" binding="b0:MiCheckProcessLotInventoryByResourceSetupServiceBinding">
+      <address location="http://172.26.11.3:50000/atlmeswebservice/MiCheckProcessLotInventoryByResourceSetupServiceService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </port>
+  </service>
+</definitions>

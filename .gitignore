@@ -1,0 +1,14 @@
+#git skip file
+
+[Bb]in/
+[Oo]bj/
+[Bb]uild/
+.vs/
+[Dd]ebug/
+x64/
+x86/
+[Rr]elease/
+
+*.png
+*.bmp
+*.jpg

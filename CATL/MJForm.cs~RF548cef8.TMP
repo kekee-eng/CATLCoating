@@ -1,0 +1,351 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+using Cognex.VisionPro;
+using Cognex.VisionPro.ToolBlock;
+
+namespace CATL
+{
+    public partial class MJForm : Form
+    {
+        ControlXDocument pinzhong = null;
+
+        public MJForm()
+        {
+            InitializeComponent();
+        }
+
+        private void MJForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Visible = false;
+        }
+
+        public void loadmj_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            pinzhong = new ControlXDocument("品种\\" + (sender as ComboBox).SelectedItem.ToString());
+            pinzhong.read(this, "0");
+        }
+
+        private void newmj_Click(object sender, EventArgs e)
+        {
+            if(newmj.BackColor == Color.Green)
+            {
+                newmj.BackColor = Color.Red; savemj.BackColor = Color.Red; delmj.BackColor = Color.Red;
+                mjid.Enabled = true; mobanname.Enabled = true; yinji.Enabled = true; yangji.Enabled = true;
+            }
+            else
+            {
+                newmj.BackColor = Color.Green; savemj.BackColor = Color.Green; delmj.BackColor = Color.Green;
+                mjid.Enabled = false; mobanname.Enabled = false; yinji.Enabled = false; yangji.Enabled = false;
+                try
+                {
+                    if (!File.Exists("品种\\" + mjid.Text + ".xml"))
+                    {
+                        pinzhong = new ControlXDocument("品种\\" + mjid.Text);
+                        set(yinji.Checked, mobanname.SelectedIndex);
+                        pinzhong.save(this, "0");
+                        MessageBox.Show("新建品种-->" + mjid.Text);
+                    }
+                    else
+                    {
+                        MessageBox.Show("已存在品种 " + mjid.Text);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("新建品种失败\r\n" + ex.Message + "\r\n" + ex.StackTrace);
+                }
+            }
+        }
+
+        private void savemj_Click(object sender, EventArgs e)
+        {
+            if(savemj.BackColor == Color.Green && mjid.Text != "")
+            {
+                //补充数据验证
+                string pf = "";
+                foreach(string line in peifang.Text.Split('|'))
+                {
+                    string newline = line;
+                    string[] cells = line.Split('_');
+                    foreach (DataGridViewRow row in zhongxin.Rows)
+                    {
+                        if (cells[0].Contains(row.Cells[0].Value.ToString()))
+                        {
+                            newline = cells[0] + "_" + cells[1] + "_" + cells[2] 
+                                + "_" + row.Cells[1].Value.ToString() + "_" + row.Cells[3].Value.ToString();
+                        }
+                    }
+                    if (pf != "") pf += "|";
+                    pf += newline;
+                }
+                peifang.Text = pf;
+                pinzhong.save(this, "0");
+                MessageBox.Show("保存品种 " + mjid.Text);
+            }
+        }
+
+        private void delmj_Click(object sender, EventArgs e)
+        {
+            if(delmj.BackColor == Color.Green && mjid.Text != "")
+            {
+                File.Delete("品种\\" + mjid.Text + ".xml");
+                MessageBox.Show("删除品种-->" + mjid.Text);
+                this.Hide();
+            }
+        }
+
+        string[] dic = new string[14] {
+            "涂膜宽度,666,1,1.5", //0
+            "极耳和AT9,66,1,1.5", //1
+            "AT 9,6,1,1.5", //2
+            "窄涂膜,666,1,1.5", //3
+            "宽涂膜,666,1,1.5", //4
+            "左极耳和AT9,66,1,1.5", //5
+            "右极耳和AT9,66,1,1.5", //6
+            "中间极耳和AT9,66,1,1.5", //7
+            "漏金属面积,10,0,0", //8
+            "极耳,66,1,1.5", //9
+            "左极耳,66,1,1.5", //10
+            "右极耳,66,1,1.5", //11
+            "中间极耳,66,1,1.5", //12
+            "错位,66,1,1.5" //13
+        };
+
+        private void set(bool yinji, int jichuji)
+        {
+            zhongxin.Rows.Clear(); peifang.Text = "";
+            if (yinji) //阴极
+            {
+                if(jichuji == 0) //一出二
+                {
+                    zhongxin.Rows.Add(dic[2].Split(','));
+                    zhongxin.Rows.Add(dic[0].Split(','));
+                    zhongxin.Rows.Add(dic[1].Split(','));
+                    zhongxin.Rows.Add(dic[13].Split(','));
+                    zhongxin.Rows.Add(dic[8].Split(','));
+                }
+                else if(jichuji == 1 || jichuji == 3 || jichuji == 5 || jichuji == 7) //一出三、五、七、九
+                {
+                    zhongxin.Rows.Add(dic[2].Split(','));
+                    zhongxin.Rows.Add(dic[4].Split(','));
+                    zhongxin.Rows.Add(dic[7].Split(','));
+                    zhongxin.Rows.Add(dic[3].Split(','));
+                    zhongxin.Rows.Add(dic[5].Split(','));
+                    zhongxin.Rows.Add(dic[6].Split(','));
+                    zhongxin.Rows.Add(dic[13].Split(','));
+                    zhongxin.Rows.Add(dic[8].Split(','));
+                }
+                else if (jichuji == 2 || jichuji == 4 || jichuji == 6 || jichuji == 8) //一出四、六、八、十
+                {
+                    zhongxin.Rows.Add(dic[2].Split(','));
+                    zhongxin.Rows.Add(dic[0].Split(','));
+                    zhongxin.Rows.Add(dic[1].Split(','));
+                    zhongxin.Rows.Add(dic[7].Split(','));
+                    zhongxin.Rows.Add(dic[13].Split(','));
+                    zhongxin.Rows.Add(dic[8].Split(','));
+                }
+                switch(jichuji)
+                {
+                    case 0:
+                        add(1, 0, 2, dic[1]); add(2, 1, 2, dic[2]); add(3, 2, 3, dic[0]);
+                        add(4, 3, 4, dic[2]); add(5, 3, 5, dic[1]); break;
+                    case 1:
+                        add(1, 0, 1, dic[5]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[2]);
+                        add(4, 2, 5, dic[7]); add(5, 4, 5, dic[2]); add(6, 5, 6, dic[4]);
+                        add(7, 6, 7, dic[2]); add(8, 6, 8, dic[6]); break;
+                    case 2:
+                        add(1, 0, 2, dic[1]); add(2, 1, 2, dic[2]); add(3, 2, 3, dic[0]);
+                        add(4, 3, 4, dic[2]); add(5, 3, 6, dic[7]); add(6, 5, 6, dic[2]);
+                        add(7, 6, 7, dic[0]); add(8, 7, 8, dic[2]); add(9, 7, 9, dic[1]); break;
+                    case 3:
+                        add(1, 0, 1, dic[5]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[2]);
+                        add(4, 2, 5, dic[7]); add(5, 4, 5, dic[2]); add(6, 5, 6, dic[4]);
+                        add(7, 6, 7, dic[2]); add(8, 6, 9, dic[7]); add(9, 8, 9, dic[2]);
+                        add(10, 9, 10, dic[4]); add(11, 10, 11, dic[2]); add(12, 10, 12, dic[6]); break;
+                    case 4:
+                        add(1, 0, 2, dic[1]); add(2, 1, 2, dic[2]); add(3, 2, 3, dic[0]);
+                        add(4, 3, 4, dic[2]); add(5, 3, 6, dic[7]); add(6, 5, 6, dic[2]);
+                        add(7, 6, 7, dic[0]); add(8, 7, 8, dic[2]); add(9, 7, 10, dic[7]);
+                        add(10, 9, 10, dic[2]); add(11, 10, 11, dic[0]); add(12, 11, 12, dic[2]);
+                        add(13, 11, 13, dic[1]); break;
+                    case 5:
+                        add(1, 0, 1, dic[5]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[2]);
+                        add(4, 2, 5, dic[7]); add(5, 4, 5, dic[2]); add(6, 5, 6, dic[4]);
+                        add(7, 6, 7, dic[2]); add(8, 6, 9, dic[7]); add(9, 8, 9, dic[2]);
+                        add(10, 9, 10, dic[4]); add(11, 10, 11, dic[2]); add(12, 10, 13, dic[7]);
+                        add(13, 12, 13, dic[2]); add(14, 13, 14, dic[4]); add(15, 14, 15, dic[2]);
+                        add(16, 14, 16, dic[6]); break;
+                    case 6:
+                        add(1, 0, 2, dic[1]); add(2, 1, 2, dic[2]); add(3, 2, 3, dic[0]);
+                        add(4, 3, 4, dic[2]); add(5, 3, 6, dic[7]); add(6, 5, 6, dic[2]);
+                        add(7, 6, 7, dic[0]); add(8, 7, 8, dic[2]); add(9, 7, 10, dic[7]);
+                        add(10, 9, 10, dic[2]); add(11, 10, 11, dic[0]); add(12, 11, 12, dic[2]);
+                        add(13, 11, 14, dic[7]); add(14, 13, 14, dic[2]); add(15, 14, 15, dic[0]);
+                        add(16, 15, 16, dic[2]); add(17, 15, 17, dic[1]); break;
+                    case 7:
+                        add(1, 0, 1, dic[5]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[2]);
+                        add(4, 2, 5, dic[7]); add(5, 4, 5, dic[2]); add(6, 5, 6, dic[4]);
+                        add(7, 6, 7, dic[2]); add(8, 6, 9, dic[7]); add(9, 8, 9, dic[2]);
+                        add(10, 9, 10, dic[4]); add(11, 10, 11, dic[2]); add(12, 10, 13, dic[7]);
+                        add(13, 12, 13, dic[2]); add(14, 13, 14, dic[4]); add(15, 14, 15, dic[2]);
+                        add(16, 14, 17, dic[7]); add(17, 16, 17, dic[2]); add(18, 17, 18, dic[4]);
+                        add(19, 18, 19, dic[2]); add(20, 18, 20, dic[6]); break;
+                    case 8:
+                        add(1, 0, 2, dic[1]); add(2, 1, 2, dic[2]); add(3, 2, 3, dic[0]);
+                        add(4, 3, 4, dic[2]); add(5, 3, 6, dic[7]); add(6, 5, 6, dic[2]);
+                        add(7, 6, 7, dic[0]); add(8, 7, 8, dic[2]); add(9, 7, 10, dic[7]);
+                        add(10, 9, 10, dic[2]); add(11, 10, 11, dic[0]); add(12, 11, 12, dic[2]);
+                        add(13, 11, 14, dic[7]); add(14, 13, 14, dic[2]); add(15, 14, 15, dic[0]);
+                        add(16, 15, 16, dic[2]); add(17, 15, 18, dic[7]); add(18, 17, 18, dic[2]);
+                        add(19, 18, 19, dic[0]); add(20, 19, 20, dic[2]); add(21, 19, 21, dic[1]); break;
+                }
+            }
+            else //阳极
+            {
+                if (jichuji == 0) //一出二
+                {
+                    zhongxin.Rows.Add(dic[9].Split(','));
+                    zhongxin.Rows.Add(dic[0].Split(','));
+                    zhongxin.Rows.Add(dic[13].Split(','));
+                    zhongxin.Rows.Add(dic[8].Split(','));
+                }
+                else if (jichuji == 1 || jichuji == 3 || jichuji == 5 || jichuji == 7) //一出三、五、七、九
+                {
+                    zhongxin.Rows.Add(dic[3].Split(','));
+                    zhongxin.Rows.Add(dic[4].Split(','));
+                    zhongxin.Rows.Add(dic[10].Split(','));
+                    zhongxin.Rows.Add(dic[11].Split(','));
+                    zhongxin.Rows.Add(dic[12].Split(','));
+                    zhongxin.Rows.Add(dic[13].Split(','));
+                    zhongxin.Rows.Add(dic[8].Split(','));
+                }
+                else if (jichuji == 2 || jichuji == 4 || jichuji == 6 || jichuji == 8) //一出四、六、八、十
+                {
+                    zhongxin.Rows.Add(dic[9].Split(','));
+                    zhongxin.Rows.Add(dic[0].Split(','));
+                    zhongxin.Rows.Add(dic[12].Split(','));
+                    zhongxin.Rows.Add(dic[13].Split(','));
+                    zhongxin.Rows.Add(dic[8].Split(','));
+                }
+                int rc = 3;
+                switch (jichuji)
+                {
+                    case 0:
+                        add(1, 0, 1, dic[9]); add(2, 1, 2, dic[0]); add(3, 2, 3, dic[9]);
+                        buchang.Text = "0,0,0";
+                        break;
+                    case 1:
+                        add(1, 0, 1, dic[10]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[12]);
+                        add(4, 3, 4, dic[4]); add(5, 4, 5, dic[11]);
+                        buchang.Text = "0,0,0,0,0";
+                        break;
+                    case 2:
+                        add(1, 0, 1, dic[9]); add(2, 1, 2, dic[0]); add(3, 2, 3, dic[9]); 
+                        add(4, 3, 4, dic[0]); add(5, 4, 5, dic[9]);
+                        buchang.Text = "0,0,0,0,0";
+                        break;
+                    case 3:
+                        add(1, 0, 1, dic[10]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[12]);
+                        add(4, 3, 4, dic[4]); add(5, 4, 5, dic[12]); add(6, 5, 6, dic[4]);
+                        add(7, 6, 7, dic[11]);
+                        buchang.Text = "0,0,0,0,0,0,0";
+                        break;
+                    case 4:
+                        add(1, 0, 1, dic[9]); add(2, 1, 2, dic[0]); add(3, 2, 3, dic[9]);
+                        add(4, 3, 4, dic[0]); add(5, 4, 5, dic[9]); add(6, 5, 6, dic[0]);
+                        add(7, 6, 7, dic[9]);
+                        buchang.Text = "0,0,0,0,0,0,0";
+                        break;
+                    case 5:
+                        add(1, 0, 1, dic[10]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[12]);
+                        add(4, 3, 4, dic[4]); add(5, 4, 5, dic[12]); add(6, 5, 6, dic[4]);
+                        add(7, 6, 7, dic[12]); add(8, 7, 8, dic[4]); add(9, 8, 9, dic[12]);
+                        buchang.Text = "0,0,0,0,0,0,0,0,0";
+                        break;
+                    case 6:
+                        add(1, 0, 1, dic[9]); add(2, 1, 2, dic[0]); add(3, 2, 3, dic[9]);
+                        add(4, 3, 4, dic[0]); add(5, 4, 5, dic[9]); add(6, 5, 6, dic[0]); 
+                        add(7, 6, 7, dic[9]); add(8, 7, 8, dic[0]); add(9, 8, 9, dic[9]);
+                        buchang.Text = "0,0,0,0,0,0,0,0,0";
+                        break;
+                    case 7:
+                        add(1, 0, 1, dic[10]); add(2, 1, 2, dic[3]); add(3, 2, 3, dic[12]);
+                        add(4, 3, 4, dic[4]); add(5, 4, 5, dic[12]); add(6, 5, 6, dic[4]);
+                        add(7, 6, 7, dic[12]); add(8, 7, 8, dic[4]); add(9, 8, 9, dic[12]);
+                        add(10, 9, 10, dic[4]); add(11, 10, 11, dic[12]);
+                        buchang.Text = "0,0,0,0,0,0,0,0,0,0,0";
+                        break;
+                    case 8:
+                        add(1, 0, 1, dic[9]); add(2, 1, 2, dic[0]); add(3, 2, 3, dic[9]);
+                        add(4, 3, 4, dic[0]); add(5, 4, 5, dic[9]); add(6, 5, 6, dic[0]);
+                        add(7, 6, 7, dic[9]); add(8, 7, 8, dic[0]); add(9, 8, 9, dic[9]);
+                        add(10, 9, 10, dic[0]); add(11, 10, 11, dic[9]);
+                        buchang.Text = "0,0,0,0,0,0,0,0,0,0,0";
+                        break;
+                }
+            }
+        }
+
+        private void add(int id, int ss, int ee, string zx)
+        {
+            if (peifang.Text != "") peifang.Text += "|";
+            string a = zx.Split(',')[0] + " " + id.ToString() + "_" 
+                + ss.ToString() + "_" + ee.ToString() + "_" 
+                + zx.Split(',')[1] + "_" + zx.Split(',')[3];
+            peifang.Text += a;
+        }
+
+        public CogToolBlockTerminalCollection readInput()
+        {
+            if (mjid.Text != "")
+            {
+                //补充数据验证
+                CogToolBlockTerminalCollection input = new CogToolBlockTerminalCollection();
+                input.Add(new CogToolBlockTerminal("pinzhong", mjid.Text));
+                input.Add(new CogToolBlockTerminal("yinji", yinji.Checked ? 1 : 0));
+                input.Add(new CogToolBlockTerminal("jichuji", mobanname.SelectedIndex));
+                foreach (DataGridViewRow row in zhongxin.Rows)
+                {
+                    input.Add(new CogToolBlockTerminal("mbzx" + row.Index.ToString(), double.Parse(row.Cells[1].Value.ToString())));
+                    input.Add(new CogToolBlockTerminal("mbkz" + row.Index.ToString(), double.Parse(row.Cells[2].Value.ToString())));
+                    input.Add(new CogToolBlockTerminal("mbgg" + row.Index.ToString(), double.Parse(row.Cells[3].Value.ToString())));
+                    input["mbzx" + row.Index.ToString()].Description = row.Cells[0].Value.ToString();
+                    input["mbkz" + row.Index.ToString()].Description = row.Cells[0].Value.ToString();
+                    input["mbgg" + row.Index.ToString()].Description = row.Cells[0].Value.ToString();
+                }
+                int i = 1;
+                foreach (string line in peifang.Text.Split('|'))
+                {
+                    string[] cells = line.Split('_'); 
+                    input.Add(new CogToolBlockTerminal("rrvv0" + i.ToString(), 0.01));
+                    input.Add(new CogToolBlockTerminal("rrvv1" + i.ToString(), 0.01));
+                    input.Add(new CogToolBlockTerminal("rrcw" + i.ToString(), 0.01));
+                    input.Add(new CogToolBlockTerminal("rrss" + i.ToString(), int.Parse(cells[1])));
+                    input.Add(new CogToolBlockTerminal("rree" + i.ToString(), int.Parse(cells[2])));
+                    input.Add(new CogToolBlockTerminal("rrzx" + i.ToString(), double.Parse(cells[3])));
+                    input.Add(new CogToolBlockTerminal("rrgg" + i.ToString(), double.Parse(cells[4])));
+                    input["rrvv0" + i.ToString()].Description = cells[0];
+                    input["rrvv1" + i.ToString()].Description = cells[0];
+                    input["rrcw" + i.ToString()].Description = cells[0];
+                    i++;
+                }
+                return input;
+            }
+            else return null;
+        }
+
+        public void mj_Click(object sender, EventArgs e)
+        {
+            TopMost = true; Show(); TopMost = false;
+        }
+    }
+}

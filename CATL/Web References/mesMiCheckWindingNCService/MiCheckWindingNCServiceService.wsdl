@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://machineintegration.ws.atlmes.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="checkWindingNCRequest" type="tns:CheckWindingNCRequest" />
+      <xs:element name="checkWindingNCResponse" type="tns:CheckWindingNCResponse" />
+      <xs:element name="miCheckWindingNC" type="tns:miCheckWindingNC" />
+      <xs:element name="miCheckWindingNCResponse" type="tns:miCheckWindingNCResponse" />
+      <xs:element name="miCommonResponse" type="tns:miCommonResponse" />
+      <xs:complexType name="miCheckWindingNC">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CheckWindingNCRequest" type="tns:CheckWindingNCRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CheckWindingNCRequest">
+        <xs:sequence>
+          <xs:element name="site" type="xs:string" />
+          <xs:element name="processLot" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miCheckWindingNCResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:CheckWindingNCResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="CheckWindingNCResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:miCommonResponse">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="processLot" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="miCommonResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:int" />
+          <xs:element minOccurs="0" name="message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="miCheckWindingNCIn">
+    <wsdl:part name="parameters" element="tns:miCheckWindingNC" />
+  </wsdl:message>
+  <wsdl:message name="miCheckWindingNCOut">
+    <wsdl:part name="miCheckWindingNCResponse" element="tns:miCheckWindingNCResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MiCheckWindingNCService">
+    <wsdl:operation name="miCheckWindingNC" parameterOrder="parameters">
+      <wsdl:input message="tns:miCheckWindingNCIn" />
+      <wsdl:output message="tns:miCheckWindingNCOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="MiCheckWindingNCServiceBinding" type="tns:MiCheckWindingNCService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="miCheckWindingNC">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MiCheckWindingNCServiceService">
+    <wsdl:port name="MiCheckWindingNCServicePort" binding="tns:MiCheckWindingNCServiceBinding">
+      <address location="http://172.26.11.3:50000/atlmeswebservice/MiCheckWindingNCServiceService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns:ns1="http://www.sap.com/me/common" xmlns:ns2="http://www.sap.com/me/datacollection" targetNamespace="http://machineintegration.ws.atlmes.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.sap.com/me/common" />
+      <xs:import namespace="http://www.sap.com/me/datacollection" />
+      <xs:element name="customDataInParametricData" type="tns:customDataInParametricData" />
+      <xs:element name="customDataOutParametricData" type="tns:customDataOutParametricData" />
+      <xs:element name="machineIntegrationParametricData" type="tns:machineIntegrationParametricData" />
+      <xs:element name="miCommonResponse" type="tns:miCommonResponse" />
+      <xs:element name="miStartSfcEx" type="tns:miStartSfcEx" />
+      <xs:element name="miStartSfcExResponse" type="tns:miStartSfcExResponse" />
+      <xs:element name="ncSfcParametricData" type="tns:ncSfcParametricData" />
+      <xs:element name="startSfcExRequest" type="tns:startSfcExRequest" />
+      <xs:element name="startSfcExResponse" type="tns:startSfcExResponse" />
+      <xs:complexType name="miStartSfcEx">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="StartSfcExRequest" type="tns:startSfcExRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="startSfcExRequest">
+        <xs:sequence>
+          <xs:element name="site" type="xs:string" />
+          <xs:element name="sfc" type="xs:string" />
+          <xs:element name="operation" type="xs:string" />
+          <xs:element minOccurs="0" name="operationRevision" type="xs:string" />
+          <xs:element name="resource" type="xs:string" />
+          <xs:element name="user" type="xs:string" />
+          <xs:element name="dcGroup" type="xs:string" />
+          <xs:element name="dcGroupRevision" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="customDataInArray" type="tns:customDataInParametricData" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="parametricDataArray" type="tns:machineIntegrationParametricData" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ncCodeArray" type="tns:ncSfcParametricData" />
+          <xs:element minOccurs="0" name="isDispositionRequired" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="customDataInParametricData">
+        <xs:sequence>
+          <xs:element name="category" type="ns1:ObjectAliasEnum" />
+          <xs:element name="dataField" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="machineIntegrationParametricData">
+        <xs:sequence>
+          <xs:element name="name" type="xs:string" />
+          <xs:element name="value" type="xs:string" />
+          <xs:element name="dataType" type="ns2:ParameterDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ncSfcParametricData">
+        <xs:sequence>
+          <xs:element name="ncCode" type="xs:string" />
+          <xs:element name="isNc" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miStartSfcExResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:startSfcExResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="startSfcExResponse">
+        <xs:complexContent mixed="false">
+          <xs:extension base="tns:miCommonResponse">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="sfc" type="xs:string" />
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="customDataOutArray" type="tns:customDataOutParametricData" />
+              <xs:element minOccurs="0" name="lastProcessLot" type="xs:string" />
+              <xs:element minOccurs="0" name="lastOperation" type="xs:string" />
+              <xs:element minOccurs="0" name="lastResource" type="xs:string" />
+              <xs:element minOccurs="0" name="lastErrorCode" type="xs:int" />
+              <xs:element minOccurs="0" name="lastErrorMessage" type="xs:string" />
+              <xs:element minOccurs="0" name="lastDateTime" type="xs:string" />
+              <xs:element minOccurs="0" name="elapsedSeconds" type="xs:int" />
+              <xs:element minOccurs="0" name="lastCallerMethodName" type="xs:string" />
+              <xs:element minOccurs="0" name="lastCallerMethodPackageClass" type="xs:string" />
+              <xs:element minOccurs="0" name="lastCallerRequestJson" type="xs:string" />
+              <xs:element minOccurs="0" name="lastFullException" type="xs:string" />
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="miCommonResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:int" />
+          <xs:element minOccurs="0" name="message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="customDataOutParametricData">
+        <xs:sequence>
+          <xs:element name="category" type="ns1:ObjectAliasEnum" />
+          <xs:element name="dataField" type="xs:string" />
+          <xs:element name="dataAttribute" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema targetNamespace="http://www.sap.com/me/common" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:simpleType name="ObjectAliasEnum">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="ACTIVITY" />
+          <xs:enumeration value="ACTIVITY_GROUP" />
+          <xs:enumeration value="ACTIVITY_LOG" />
+          <xs:enumeration value="ALARM" />
+          <xs:enumeration value="ALARM_LOG" />
+          <xs:enumeration value="APPLICATION_SETTING" />
+          <xs:enumeration value="ATTACHMENT" />
+          <xs:enumeration value="ATTENDANCE_LOG" />
+          <xs:enumeration value="BACKGROUND_PROCESS" />
+          <xs:enumeration value="BOM" />
+          <xs:enumeration value="BOM_COMPONENT" />
+          <xs:enumeration value="BUYOFF" />
+          <xs:enumeration value="BUYOFF_LOG" />
+          <xs:enumeration value="CERTIFICATION" />
+          <xs:enumeration value="CONTAINER" />
+          <xs:enumeration value="CONTAINER_DATA" />
+          <xs:enumeration value="COST_CENTER" />
+          <xs:enumeration value="CUSTOMER" />
+          <xs:enumeration value="DATA_FIELD" />
+          <xs:enumeration value="DATA_TYPE" />
+          <xs:enumeration value="DC_GROUP" />
+          <xs:enumeration value="INVENTORY" />
+          <xs:enumeration value="INVENTORY_LOG" />
+          <xs:enumeration value="ITEM_GROUP" />
+          <xs:enumeration value="MESSAGE" />
+          <xs:enumeration value="MESSAGE_LOG" />
+          <xs:enumeration value="NC_CODE" />
+          <xs:enumeration value="NEXT_NUMBER" />
+          <xs:enumeration value="OPERATION" />
+          <xs:enumeration value="PROCESS_LOT" />
+          <xs:enumeration value="PRODUCTION_LOG" />
+          <xs:enumeration value="REASON_CODE" />
+          <xs:enumeration value="SAMPLE_PLAN" />
+          <xs:enumeration value="WORK_INSTRUCTION" />
+          <xs:enumeration value="ITEM" />
+          <xs:enumeration value="RESOURCE" />
+          <xs:enumeration value="ROUTER" />
+          <xs:enumeration value="SHOP_ORDER" />
+          <xs:enumeration value="ROUTER_STEP" />
+          <xs:enumeration value="SFC" />
+          <xs:enumeration value="USR" />
+          <xs:enumeration value="WORK_CENTER" />
+          <xs:enumeration value="WORKSTATION" />
+          <xs:enumeration value="RESOURCE_TYPE" />
+          <xs:enumeration value="CUSTOMER_ORDER" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema targetNamespace="http://www.sap.com/me/datacollection" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:simpleType name="ParameterDataType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NUMBER" />
+          <xs:enumeration value="TEXT" />
+          <xs:enumeration value="FORMULA" />
+          <xs:enumeration value="BOOLEAN" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="miStartSfcExIn">
+    <wsdl:part name="parameters" element="tns:miStartSfcEx" />
+  </wsdl:message>
+  <wsdl:message name="miStartSfcExOut">
+    <wsdl:part name="miStartSfcExResponse" element="tns:miStartSfcExResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MiStartSfcExService">
+    <wsdl:operation name="miStartSfcEx" parameterOrder="parameters">
+      <wsdl:input message="tns:miStartSfcExIn" />
+      <wsdl:output message="tns:miStartSfcExOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="MiStartSfcExServiceBinding" type="tns:MiStartSfcExService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="miStartSfcEx">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MiStartSfcExServiceService">
+    <wsdl:port name="MiStartSfcExServicePort" binding="tns:MiStartSfcExServiceBinding">
+      <address location="http://172.26.11.3:50000/atlmeswebservice/MiStartSfcExServiceService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

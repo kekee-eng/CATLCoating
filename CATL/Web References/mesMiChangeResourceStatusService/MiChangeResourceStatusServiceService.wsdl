@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://machineintegration.ws.atlmes.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="chgResStatusRequest" type="tns:chgResStatusRequest" />
+      <xs:element name="miChangeResourceStatus" type="tns:miChangeResourceStatus" />
+      <xs:element name="miChangeResourceStatusResponse" type="tns:miChangeResourceStatusResponse" />
+      <xs:element name="miCommonResponse" type="tns:miCommonResponse" />
+      <xs:complexType name="miChangeResourceStatus">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ChgResStatusRequest" type="tns:chgResStatusRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="chgResStatusRequest">
+        <xs:sequence>
+          <xs:element name="site" type="xs:string" />
+          <xs:element name="resource" type="xs:string" />
+          <xs:element name="immediate" type="xs:boolean" />
+          <xs:element name="status" type="xs:int" />
+          <xs:element minOccurs="0" name="reasonCode" type="xs:string" />
+          <xs:element minOccurs="0" name="comments" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miChangeResourceStatusResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:miCommonResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miCommonResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:int" />
+          <xs:element minOccurs="0" name="message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="miChangeResourceStatusIn">
+    <wsdl:part name="parameters" element="tns:miChangeResourceStatus" />
+  </wsdl:message>
+  <wsdl:message name="miChangeResourceStatusOut">
+    <wsdl:part name="miChangeResourceStatusResponse" element="tns:miChangeResourceStatusResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MiChangeResourceStatusService">
+    <wsdl:operation name="miChangeResourceStatus" parameterOrder="parameters">
+      <wsdl:input message="tns:miChangeResourceStatusIn" />
+      <wsdl:output message="tns:miChangeResourceStatusOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="MiChangeResourceStatusServiceBinding" type="tns:MiChangeResourceStatusService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="miChangeResourceStatus">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MiChangeResourceStatusServiceService">
+    <wsdl:port name="MiChangeResourceStatusServicePort" binding="tns:MiChangeResourceStatusServiceBinding">
+      <address location="http://172.26.11.3:50000/atlmeswebservice/MiChangeResourceStatusServiceService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

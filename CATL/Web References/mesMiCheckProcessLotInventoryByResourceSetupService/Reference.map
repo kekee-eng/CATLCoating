@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://172.26.11.3:50000/atlmeswebservice/MiCheckProcessLotInventoryByResourceSetupServiceService?location=META-INF/wsdl/pt_tmpl_wsdl1462928586678&amp;wsdl&amp;mode=ws_policy" filename="pt_tmpl_wsdl1462928586678&amp;wsdl&amp;mode=ws_policy.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://172.26.11.3:50000/atlmeswebservice/MiCheckProcessLotInventoryByResourceSetupServiceService?wsdl&amp;mode=ws_policy" filename="MiCheckProcessLotInventoryByResourceSetupServiceService.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://172.26.11.3:50000/atlmeswebservice/MiCheckProcessLotInventoryByResourceSetupServiceService?wsdl=binding&amp;mode=ws_policy" filename="MiCheckProcessLotInventoryByResourceSetupServiceService0.wsdl" />
+  </Results>
+</DiscoveryClientResultsFile>

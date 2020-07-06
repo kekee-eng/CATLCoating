@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns:ns1="http://www.sap.com/me/datacollection" targetNamespace="http://machineintegration.ws.atlmes.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.sap.com/me/datacollection" />
+      <xs:element name="assembleProcessLotAndDataCollectForSfcRequest" type="tns:assembleProcessLotAndDataCollectForSfcRequest" />
+      <xs:element name="machineIntegrationParametricData" type="tns:machineIntegrationParametricData" />
+      <xs:element name="miAssembleProcessLotAndDataCollectForSfc" type="tns:miAssembleProcessLotAndDataCollectForSfc" />
+      <xs:element name="miAssembleProcessLotAndDataCollectForSfcResponse" type="tns:miAssembleProcessLotAndDataCollectForSfcResponse" />
+      <xs:element name="miCommonResponse" type="tns:miCommonResponse" />
+      <xs:element name="ncSfcParametricData" type="tns:ncSfcParametricData" />
+      <xs:complexType name="miAssembleProcessLotAndDataCollectForSfc">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="MiAssembleProcessLotAndDataCollectForSfcRequest" type="tns:assembleProcessLotAndDataCollectForSfcRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="assembleProcessLotAndDataCollectForSfcRequest">
+        <xs:sequence>
+          <xs:element name="site" type="xs:string" />
+          <xs:element name="sfc" type="xs:string" />
+          <xs:element name="dcGroup" type="xs:string" />
+          <xs:element minOccurs="0" name="dcGroupRevision" type="xs:string" />
+          <xs:element name="operation" type="xs:string" />
+          <xs:element minOccurs="0" name="operationRevision" type="xs:string" />
+          <xs:element name="resource" type="xs:string" />
+          <xs:element name="user" type="xs:string" />
+          <xs:element name="activityId" type="xs:string" />
+          <xs:element maxOccurs="unbounded" name="parametricDataArray" type="tns:machineIntegrationParametricData" />
+          <xs:element maxOccurs="unbounded" name="ncCodeArray" type="tns:ncSfcParametricData" />
+          <xs:element name="modeProcessSfc" type="tns:ModeProcessSfc" />
+          <xs:element maxOccurs="unbounded" name="processLotArray" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="machineIntegrationParametricData">
+        <xs:sequence>
+          <xs:element name="name" type="xs:string" />
+          <xs:element name="value" type="xs:string" />
+          <xs:element name="dataType" type="ns1:ParameterDataType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ncSfcParametricData">
+        <xs:sequence>
+          <xs:element name="ncCode" type="xs:string" />
+          <xs:element name="isNc" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miAssembleProcessLotAndDataCollectForSfcResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:miCommonResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miCommonResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:int" />
+          <xs:element minOccurs="0" name="message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ModeProcessSfc">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="MODE_NONE" />
+          <xs:enumeration value="MODE_START_SFC_PRE_DC" />
+          <xs:enumeration value="MODE_COMPLETE_SFC_POST_DC" />
+          <xs:enumeration value="MODE_PASS_SFC_POST_DC" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema targetNamespace="http://www.sap.com/me/datacollection" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:simpleType name="ParameterDataType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NUMBER" />
+          <xs:enumeration value="TEXT" />
+          <xs:enumeration value="FORMULA" />
+          <xs:enumeration value="BOOLEAN" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="miAssembleProcessLotAndDataCollectForSfcIn">
+    <wsdl:part name="parameters" element="tns:miAssembleProcessLotAndDataCollectForSfc" />
+  </wsdl:message>
+  <wsdl:message name="miAssembleProcessLotAndDataCollectForSfcOut">
+    <wsdl:part name="miAssembleProcessLotAndDataCollectForSfcResponse" element="tns:miAssembleProcessLotAndDataCollectForSfcResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MiAssembleProcessLotAndDataCollectForSfcService">
+    <wsdl:operation name="miAssembleProcessLotAndDataCollectForSfc" parameterOrder="parameters">
+      <wsdl:input message="tns:miAssembleProcessLotAndDataCollectForSfcIn" />
+      <wsdl:output message="tns:miAssembleProcessLotAndDataCollectForSfcOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="MiAssembleProcessLotAndDataCollectForSfcServiceBinding" type="tns:MiAssembleProcessLotAndDataCollectForSfcService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="miAssembleProcessLotAndDataCollectForSfc">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MiAssembleProcessLotAndDataCollectForSfcServiceService">
+    <wsdl:port name="MiAssembleProcessLotAndDataCollectForSfcServicePort" binding="tns:MiAssembleProcessLotAndDataCollectForSfcServiceBinding">
+      <address location="http://172.26.11.3:50000/atlmeswebservice/MiAssembleProcessLotAndDataCollectForSfcServiceService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

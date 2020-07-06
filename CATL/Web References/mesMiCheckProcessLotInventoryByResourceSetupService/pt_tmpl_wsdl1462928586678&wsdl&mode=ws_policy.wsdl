@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <UsingPolicy xmlns="http://schemas.xmlsoap.org/ws/2004/09/policy" />
+  <wsdl:types>
+    <xs:schema targetNamespace="http://machineintegration.ws.atlmes.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="checkProcessLotInventoryByResourceSetupRequest" type="tns:checkProcessLotInventoryByResourceSetupRequest" />
+      <xs:element name="checkProcessLotInventoryByResourceSetupResponse" type="tns:checkProcessLotInventoryByResourceSetupResponse" />
+      <xs:element name="miCheckProcessLotInventoryByResourceSetup" type="tns:miCheckProcessLotInventoryByResourceSetup" />
+      <xs:element name="miCheckProcessLotInventoryByResourceSetupResponse" type="tns:miCheckProcessLotInventoryByResourceSetupResponse" />
+      <xs:complexType name="miCheckProcessLotInventoryByResourceSetup">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CheckProcessLotInventoryByResourceSetupRequest" type="tns:checkProcessLotInventoryByResourceSetupRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="checkProcessLotInventoryByResourceSetupRequest">
+        <xs:sequence>
+          <xs:element name="site" type="xs:string" />
+          <xs:element name="operation" type="xs:string" />
+          <xs:element name="operationRevision" type="xs:string" />
+          <xs:element name="resource" type="xs:string" />
+          <xs:element name="user" type="xs:string" />
+          <xs:element name="activity" type="xs:string" />
+          <xs:element name="modeMatch" type="tns:ModeMatch" />
+          <xs:element maxOccurs="unbounded" name="processlotArray" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miCheckProcessLotInventoryByResourceSetupResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:checkProcessLotInventoryByResourceSetupResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="checkProcessLotInventoryByResourceSetupResponse">
+        <xs:sequence>
+          <xs:element name="code" type="xs:int" />
+          <xs:element name="message" type="xs:string" />
+          <xs:element maxOccurs="unbounded" name="inventoryArray" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ModeMatch">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="0" />
+          <xs:enumeration value="2" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="miCheckProcessLotInventoryByResourceSetupIn">
+    <wsdl:part name="parameters" element="tns:miCheckProcessLotInventoryByResourceSetup" />
+  </wsdl:message>
+  <wsdl:message name="miCheckProcessLotInventoryByResourceSetupOut">
+    <wsdl:part name="miCheckProcessLotInventoryByResourceSetupResponse" element="tns:miCheckProcessLotInventoryByResourceSetupResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MiCheckProcessLotInventoryByResourceSetupService">
+    <wsdl:operation name="miCheckProcessLotInventoryByResourceSetup" parameterOrder="parameters">
+      <wsdl:input message="tns:miCheckProcessLotInventoryByResourceSetupIn" />
+      <wsdl:output message="tns:miCheckProcessLotInventoryByResourceSetupOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

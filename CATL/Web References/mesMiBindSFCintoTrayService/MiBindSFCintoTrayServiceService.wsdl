@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://machineintegration.ws.atlmes.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="bindSFCintoTrayRequest" type="tns:bindSFCintoTrayRequest" />
+      <xs:element name="miBindSFCintoTray" type="tns:miBindSFCintoTray" />
+      <xs:element name="miBindSFCintoTrayResponse" type="tns:miBindSFCintoTrayResponse" />
+      <xs:element name="miCommonResponse" type="tns:miCommonResponse" />
+      <xs:complexType name="miBindSFCintoTray">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="BindSFCintoTrayRequest" type="tns:bindSFCintoTrayRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="bindSFCintoTrayRequest">
+        <xs:sequence>
+          <xs:element name="site" type="xs:string" />
+          <xs:element name="trayId" type="xs:string" />
+          <xs:element name="position" type="xs:int" />
+          <xs:element name="sfc" type="xs:string" />
+          <xs:element name="mode" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miBindSFCintoTrayResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:miCommonResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miCommonResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:int" />
+          <xs:element minOccurs="0" name="message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="miBindSFCintoTrayIn">
+    <wsdl:part name="parameters" element="tns:miBindSFCintoTray" />
+  </wsdl:message>
+  <wsdl:message name="miBindSFCintoTrayOut">
+    <wsdl:part name="miBindSFCintoTrayResponse" element="tns:miBindSFCintoTrayResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MiBindSFCintoTrayService">
+    <wsdl:operation name="miBindSFCintoTray" parameterOrder="parameters">
+      <wsdl:input message="tns:miBindSFCintoTrayIn" />
+      <wsdl:output message="tns:miBindSFCintoTrayOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="MiBindSFCintoTrayServiceBinding" type="tns:MiBindSFCintoTrayService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="miBindSFCintoTray">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MiBindSFCintoTrayServiceService">
+    <wsdl:port name="MiBindSFCintoTrayServicePort" binding="tns:MiBindSFCintoTrayServiceBinding">
+      <address location="http://172.26.11.3:50000/atlmeswebservice/MiBindSFCintoTrayServiceService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tns="http://machineintegration.ws.atlmes.com/" targetNamespace="http://machineintegration.ws.atlmes.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema xmlns:ns1="http://www.sap.com/me/datacollection" targetNamespace="http://machineintegration.ws.atlmes.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.sap.com/me/datacollection" />
+      <xs:element name="miStart2NdInjectionRequest" type="tns:miStart2NdInjectionRequest" />
+      <xs:element name="miStart2NdInjectionResponse" type="tns:miStart2NdInjectionResponse" />
+      <xs:element name="miStart2ndInjection" type="tns:miStart2ndInjection" />
+      <xs:element name="miStart2ndInjectionResponse" type="tns:miStart2ndInjectionResponse" />
+      <xs:complexType name="miStart2ndInjection">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="MiStart2ndInjectionRequest" type="tns:miStart2NdInjectionRequest" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miStart2NdInjectionRequest">
+        <xs:sequence>
+          <xs:element name="site" type="xs:string" />
+          <xs:element name="sfc" type="xs:string" />
+          <xs:element name="operation" type="xs:string" />
+          <xs:element minOccurs="0" name="operationRevision" type="xs:string" />
+          <xs:element name="resource" type="xs:string" />
+          <xs:element name="user" type="xs:string" />
+          <xs:element maxOccurs="unbounded" name="parametricDatas" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miStart2ndInjectionResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:miStart2NdInjectionResponse" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="miStart2NdInjectionResponse">
+        <xs:sequence>
+          <xs:element name="code" type="xs:int" />
+          <xs:element name="message" type="xs:string" />
+          <xs:element maxOccurs="unbounded" name="parametricDatas" type="tns:machineIntegrationParametricData" />
+          <xs:element name="lastErrorCode" type="xs:int" />
+          <xs:element name="lastErrorMessage" type="xs:string" />
+          <xs:element name="lastProcessLot" type="xs:string" />
+          <xs:element name="lastOperation" type="xs:string" />
+          <xs:element name="lastResource" type="xs:string" />
+          <xs:element name="lastDateTime" type="xs:string" />
+          <xs:element name="elapsedSeconds" type="xs:long" />
+          <xs:element name="lastCallerMethodName" type="xs:string" />
+          <xs:element name="lastCallerRequstJson" type="xs:string" />
+          <xs:element name="lastFullException" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="machineIntegrationParametricData">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="dataType" type="ns1:ParameterDataType" />
+          <xs:element minOccurs="0" name="name" type="xs:string" />
+          <xs:element minOccurs="0" name="value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema targetNamespace="http://www.sap.com/me/datacollection" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:simpleType name="ParameterDataType">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NUMBER" />
+          <xs:enumeration value="TEXT" />
+          <xs:enumeration value="FORMULA" />
+          <xs:enumeration value="BOOLEAN" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="miStart2ndInjectionIn">
+    <wsdl:part name="parameters" element="tns:miStart2ndInjection" />
+  </wsdl:message>
+  <wsdl:message name="miStart2ndInjectionOut">
+    <wsdl:part name="miStart2ndInjectionResponse" element="tns:miStart2ndInjectionResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MiStart2ndInjectionService">
+    <wsdl:operation name="miStart2ndInjection" parameterOrder="parameters">
+      <wsdl:input message="tns:miStart2ndInjectionIn" />
+      <wsdl:output message="tns:miStart2ndInjectionOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="MiStart2ndInjectionServiceBinding" type="tns:MiStart2ndInjectionService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="miStart2ndInjection">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MiStart2ndInjectionServiceService">
+    <wsdl:port name="MiStart2ndInjectionServicePort" binding="tns:MiStart2ndInjectionServiceBinding">
+      <address location="http://172.26.11.3:50000/atlmeswebservice/MiStart2ndInjectionServiceService" xmlns="http://schemas.xmlsoap.org/wsdl/soap/" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
